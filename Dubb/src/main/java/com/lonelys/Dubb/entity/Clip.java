@@ -12,6 +12,7 @@ public class Clip {
     private double Clip_Duration;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Movie_ID")
     private Movie Source_Movie;
 
     public Clip() { }
