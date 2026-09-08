@@ -14,7 +14,7 @@ public class Movie {
     private int movieYear;
     private String movieDirector;
 
-    @OneToMany(mappedBy = "Movie_ID", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "sourceMovie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Clip> movieClips = new ArrayList<>();
 
     public Movie() { }

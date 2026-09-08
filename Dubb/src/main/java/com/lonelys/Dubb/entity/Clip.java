@@ -1,6 +1,8 @@
 package com.lonelys.Dubb.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Clip {
@@ -12,9 +14,11 @@ public class Clip {
     private double clipDuration;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Movie_ID")
+    @JoinColumn(name = "sourceMovie")
     private Movie sourceMovie;
 
+    @OneToMany(mappedBy = "clip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AttemptJPA> attempts = new ArrayList<>();
     public Clip() { }
 
     public Clip(String Clip_Title, double Clip_Duration, Movie source) {
@@ -53,6 +57,14 @@ public class Clip {
 
     public void setSourceMovie(Movie source) {
         sourceMovie = source;
+    }
+
+    public List<AttemptJPA> getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(List<AttemptJPA> attempts) {
+        this.attempts = attempts;
     }
 
     @Override
