@@ -6,57 +6,57 @@ import jakarta.persistence.*;
 public class Clip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Clip_ID;
+    private long clipID;
 
-    private String Clip_Title;
-    private double Clip_Duration;
+    private String clipTitle;
+    private double clipDuration;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Movie_ID")
-    private Movie Source_Movie;
+    private Movie sourceMovie;
 
     public Clip() { }
 
     public Clip(String Clip_Title, double Clip_Duration, Movie source) {
-        this.Clip_Title = Clip_Title;
-        this.Clip_Duration = Clip_Duration;
-        this.Source_Movie = source;
+        this.clipTitle = Clip_Title;
+        this.clipDuration = Clip_Duration;
+        this.sourceMovie = source;
     }
 
-    public long getClip_ID() {
-        return Clip_ID;
+    public long getClipID() {
+        return clipID;
     }
 
-    public void setClip_ID(long clip_ID) {
-        Clip_ID = clip_ID;
+    public void setClipID(long clipID) {
+        this.clipID = clipID;
     }
 
-    public String getClip_Title() {
-        return Clip_Title;
+    public String getClipTitle() {
+        return clipTitle;
     }
 
-    public void setClip_Title(String clip_Title) {
-        Clip_Title = clip_Title;
+    public void setClipTitle(String clipTitle) {
+        this.clipTitle = clipTitle;
     }
 
-    public double getClip_Duration() {
-        return Clip_Duration;
+    public double getClipDuration() {
+        return clipDuration;
     }
 
-    public void setClip_Duration(double clip_Duration) {
-        Clip_Duration = clip_Duration;
+    public void setClipDuration(double clipDuration) {
+        this.clipDuration = clipDuration;
     }
 
-    public Movie getSource_Movie() {
-        return Source_Movie;
+    public Movie getSourceMovie() {
+        return sourceMovie;
     }
 
-    public void setSource_Movie(Movie source) {
-        Source_Movie = source;
+    public void setSourceMovie(Movie source) {
+        sourceMovie = source;
     }
 
     @Override
     public String toString() {
-        return "\"" + Clip_Title + "\" from the movie: " + Source_Movie.getMovie_Title();
+        return "\"" + clipTitle + "\" from the movie: " + sourceMovie.getMovieTitle();
     }
 }
