@@ -1,70 +1,83 @@
 package com.lonelys.Dubb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Movie {
+
+    // Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long movieID;
+    private Long movieID;
 
     private String movieTitle;
     private int movieYear;
     private String movieDirector;
 
+    // OneToMany towards Movie
     @OneToMany(mappedBy = "sourceMovie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Clip> movieClips = new ArrayList<>();
 
+
+    // Constructors
     public Movie() { }
 
-    public Movie(String Movie_Title, int Movie_Year, String Movie_Director) {
-        this.movieTitle = Movie_Title;
-        this.movieYear = Movie_Year;
-        this.movieDirector = Movie_Director;
+    public Movie(String movieTitle, int movieYear, String movieDirector) {
+        this.movieTitle = movieTitle;
+        this.movieYear = movieYear;
+        this.movieDirector = movieDirector;
     }
 
+
+    // Getters
     public long getMovieID() {
         return movieID;
-    }
-
-    public void setMovieID(long Movie_ID) {
-        this.movieID = Movie_ID;
     }
 
     public String getMovieTitle() {
         return movieTitle;
     }
 
-    public void setMovieTitle(String Movie_Title) {
-        this.movieTitle = Movie_Title;
-    }
-
     public int getMovieYear() {
         return movieYear;
-    }
-
-    public void setMovieYear(int Movie_Year) {
-        this.movieYear = Movie_Year;
     }
 
     public String getMovieDirector() {
         return movieDirector;
     }
 
-    public void setMovieDirector(String Movie_Director) {
-        this.movieDirector = Movie_Director;
-    }
-
     public List<Clip> getMovieClips() {
         return movieClips;
     }
 
-    public void setMovieClips(List<Clip> Movie_Clips) {
-        this.movieClips = Movie_Clips;
+
+    // Setters
+    public void setMovieID(long movieID) {
+        this.movieID = movieID;
     }
 
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
+    }
+
+    public void setMovieYear(int movieYear) {
+        this.movieYear = movieYear;
+    }
+
+    public void setMovieDirector(String movieDirector) {
+        this.movieDirector = movieDirector;
+    }
+
+    public void setMovieClips(List<Clip> movieClips) {
+        this.movieClips = movieClips;
+    }
+
+
+    // Methods
     @Override
     public String toString() {
         return "\"" + movieTitle + "\"" + ", directed by " + movieDirector + " in " + movieYear + ".";

@@ -24,22 +24,20 @@ public class User {
     // An User can have multiple Attempts
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<AttemptJPA> attempts = new ArrayList<>();
+    private List<Attempt> attempts = new ArrayList<>();
 
 
     // Constructor
-
     public User() {
     }
 
-    public User(String username, String user_mail, LocalDate user_joindate) {
-        this.userMail = user_mail;
+    public User(String username, String userMail, LocalDate userJoindate) {
+        this.userMail = userMail;
         this.username = username;
-        this.userJoindate = user_joindate;
+        this.userJoindate = userJoindate;
     }
 
     // Getters
-
     public Long getUserID() {
         return userID;
     }
@@ -56,27 +54,26 @@ public class User {
         return username;
     }
 
-    public List<AttemptJPA> getAttempts() {
+    public List<Attempt> getAttempts() {
         return attempts;
     }
 
 
     // Setters
-
-    public void setAttempts(List<AttemptJPA> attemptJPA) {
-        attempts = attemptJPA;
+    public void setAttempts(List<Attempt> attempt) {
+        attempts = attempt;
     }
 
-    public void setUserID(Long user_ID) {
-        this.userID = user_ID;
+    public void setUserID(Long userID) {
+        this.userID = userID;
     }
 
     public void setUserJoindate(LocalDate userJoindate) {
         this.userJoindate = userJoindate;
     }
 
-    public void setUserMail(String user_Mail) {
-        this.userMail = user_Mail;
+    public void setUserMail(String userMail) {
+        this.userMail = userMail;
     }
 
     public void setUsername(String username) {
@@ -85,9 +82,9 @@ public class User {
 
 
     // Methods
-
     @Override
     public String toString() {
         return username + " : {" + userMail + " | " + userJoindate + "}\n" + "Attempts -> " + attempts;
     }
+
 }

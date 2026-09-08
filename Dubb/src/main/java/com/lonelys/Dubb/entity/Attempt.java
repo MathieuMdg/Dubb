@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class AttemptJPA {
+public class Attempt {
 
     // Attributes
     @Id
@@ -21,16 +21,17 @@ public class AttemptJPA {
     @JsonIgnore
     private User user;
 
+    // ManyToOne towards Clip
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clip")
+    @JoinColumn(name = "clip_id")
     private Clip clip;
 
 
     // Constructors
-    public AttemptJPA() {
+    public Attempt() {
     }
 
-    public AttemptJPA(Double attemptScore, LocalDateTime attemptDate, User user) {
+    public Attempt(Double attemptScore, LocalDateTime attemptDate, User user) {
         this.attemptScore = attemptScore;
         this.attemptDate = attemptDate;
         this.user = user;
@@ -38,7 +39,6 @@ public class AttemptJPA {
 
 
     // Getters
-
     public Long getAttemptID() {
         return attemptID;
     }
@@ -61,7 +61,6 @@ public class AttemptJPA {
 
 
     // Setters
-
     public void setAttemptID(Long attemptId) {
         this.attemptID = attemptId;
     }
@@ -70,8 +69,8 @@ public class AttemptJPA {
         this.attemptScore = score;
     }
 
-    public void setAttemptDate(LocalDateTime recordedAt) {
-        this.attemptDate = recordedAt;
+    public void setAttemptDate(LocalDateTime attemptDate) {
+        this.attemptDate = attemptDate;
     }
 
     public void setUser(User user) {
@@ -84,9 +83,9 @@ public class AttemptJPA {
 
 
     // Methods
-
     @Override
     public String toString() {
         return "Attempt[" + attemptID + "] score=" + attemptScore;
     }
+
 }
