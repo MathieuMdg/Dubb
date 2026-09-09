@@ -15,7 +15,5 @@ public interface AttemptRepository extends CrudRepository<Attempt, Long> {
 
     List<Attempt> findByUser(User user);
     List<Attempt> findByClip(Clip clip);
-    List<Attempt> findByAttemptDate(LocalDateTime attemptDate);
-    List<Attempt> findByAttemptScore(Double attemptScore);
 
 }

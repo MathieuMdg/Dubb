@@ -51,15 +51,19 @@ public class UserService {
 
     // Check if there's no duplicate data
     private void checkAvailability(String username, String userMail){
-
         if(userRepository.existsByUserMail(userMail)) {
             log.warn("Attempt to create with an duplicate Mail");
             throw new DuplicateException("Mail already used by another account : " + userMail);
         }
-
         if(userRepository.existsByUsername(username)) {
             log.warn("Attempt to create with an duplicate Username");
             throw new DuplicateException("Username already used by another account : " + username);
         }
+    }
+
+    // Delete a user in the database
+    public void deleteUser(User user){
+        userRepository.delete(user);
+        log.info("user deleted : {}", user);
     }
 }

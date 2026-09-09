@@ -3,6 +3,8 @@ package com.lonelys.Dubb.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Attempt {
@@ -12,8 +14,11 @@ public class Attempt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attemptID;
 
-    private Double attemptScore;
-    private LocalDateTime attemptDate;
+    private LocalDateTime startedAt;
+    private LocalDateTime completedAt;
+    private String status;
+    private String finalVideoPath;
+    private Double globalScore;
 
     // ManyToOne towards User
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,14 +31,18 @@ public class Attempt {
     @JoinColumn(name = "clip_id")
     private Clip clip;
 
+    // OneToMany towards SegmentRecording
+    @OneToMany(mappedBy = "attempt", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<SegmentRecording> recordings = new ArrayList<>();
+
 
     // Constructors
     public Attempt() {
     }
 
-    public Attempt(Double attemptScore, LocalDateTime attemptDate, User user) {
-        this.attemptScore = attemptScore;
-        this.attemptDate = attemptDate;
+    public Attempt(Double globalScore, User user) {
+        this.globalScore = globalScore;
         this.user = user;
     }
 
@@ -43,12 +52,28 @@ public class Attempt {
         return attemptID;
     }
 
-    public Double getAttemptScore() {
-        return attemptScore;
+    public LocalDateTime getCompletedAt() {
+        return completedAt;
     }
 
-    public LocalDateTime getAttemptDate() {
-        return attemptDate;
+    public List<SegmentRecording> getRecordings() {
+        return recordings;
+    }
+
+    public String getFinalVideoPath() {
+        return finalVideoPath;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getStartedAt() {
+        return startedAt;
+    }
+
+    public Double getGlobalScore() {
+        return globalScore;
     }
 
     public User getUser() {
@@ -65,14 +90,6 @@ public class Attempt {
         this.attemptID = attemptId;
     }
 
-    public void setAttemptScore(Double score) {
-        this.attemptScore = score;
-    }
-
-    public void setAttemptDate(LocalDateTime attemptDate) {
-        this.attemptDate = attemptDate;
-    }
-
     public void setUser(User user) {
         this.user = user;
     }
@@ -81,11 +98,31 @@ public class Attempt {
         this.clip = clip;
     }
 
+    public void setRecordings(List<SegmentRecording> recordings) {
+        this.recordings = recordings;
+    }
+
+    public void setCompletedAt(LocalDateTime completedAt) {
+        this.completedAt = completedAt;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setFinalVideoPath(String finalVideoPath) {
+        this.finalVideoPath = finalVideoPath;
+    }
+
+    public void setGlobalScore(Double globalScore) {
+        this.globalScore = globalScore;
+    }
+
 
     // Methods
     @Override
     public String toString() {
-        return "Attempt[" + attemptID + "] score=" + attemptScore;
+        return "Attempt[" + attemptID + "] score=" + globalScore;
     }
 
 }
