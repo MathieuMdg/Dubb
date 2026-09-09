@@ -10,6 +10,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     List<User> findByUserJoindate(LocalDate userJoindate);
 
-    
+    // Detect if a user already exist in the database
+    boolean existsByUserMail(String UserMail);
+    boolean existsByUsername(String username);
 
 }
