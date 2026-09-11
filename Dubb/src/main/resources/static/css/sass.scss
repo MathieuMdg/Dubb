@@ -1,0 +1,26 @@
+$bgm: #001f44;
+
+.shanti {
+  font-family: "Shanti", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+body {
+  background-color: $bgm;
+}
+
+#banner {
+  width: 100%;
+  height: 10em;
+  justify-content: center;
+  display: flex;
+
+  h1 {
+    font-size: 80px;
+    text-align: center;
+    color: white;
+    align-content: center;
+  }
+}
