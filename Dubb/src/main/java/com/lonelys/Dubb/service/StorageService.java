@@ -125,6 +125,7 @@ public class StorageService {
         return Paths.get(storageRoot, relativePath);
     }
 
+    //Get the file .extension
     private String getExtension(String fileName) {
         if (fileName == null || !fileName.contains(".")) {
             return "";

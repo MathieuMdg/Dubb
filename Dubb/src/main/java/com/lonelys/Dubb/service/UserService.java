@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -65,5 +66,10 @@ public class UserService {
     public void deleteUser(User user){
         userRepository.delete(user);
         log.info("user deleted : {}", user);
+    }
+
+    // Get all user
+    public List<User> getUsers(){
+        return (List<User>) userRepository.findAll();
     }
 }

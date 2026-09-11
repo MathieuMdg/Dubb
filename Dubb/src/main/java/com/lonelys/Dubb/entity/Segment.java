@@ -25,6 +25,14 @@ public class Segment {
     // Constructors
     public Segment(){}
 
+    public Segment(Clip clip, double startTime, double endTime, int orderIndex, boolean dubbable){
+        this.clip = clip;
+        this.dubbable = dubbable;
+        this.endTime = endTime;
+        this.orderIndex = orderIndex;
+        this.startTime = startTime;
+    }
+
     // Getters
     public Long getSegmentID() {
         return segmentID;

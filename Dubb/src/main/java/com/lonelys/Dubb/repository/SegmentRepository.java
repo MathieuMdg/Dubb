@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface SegmentRepository extends CrudRepository<Segment, Long> {
     List<Segment> findByClipOrderByOrderIndexAsc(Clip clip);
+    Segment findBySegmentID(Long segmentID);
 }

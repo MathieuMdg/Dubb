@@ -118,6 +118,9 @@ public class Attempt {
         this.globalScore = globalScore;
     }
 
+    public void setStartedAt(LocalDateTime startedAt) {
+        this.startedAt = startedAt;
+    }
 
     // Methods
     @Override

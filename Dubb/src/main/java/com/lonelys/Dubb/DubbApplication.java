@@ -10,5 +10,4 @@ public class DubbApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DubbApplication.class, args);
 	}
-
 }
