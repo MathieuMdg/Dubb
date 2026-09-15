@@ -1,24 +1,57 @@
+@property --w_raw {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 100vw;
+}
+@property --h_raw {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 100vh;
+}
+body {
+  background: #12004d;
+  background: linear-gradient(180deg, rgb(18, 0, 77) 0%, rgb(0, 65, 115) 100%);
+  margin: 0;
+  padding: 0;
+  height: var(--h_raw);
+  width: var(--w_raw);
+}
+
 .shanti {
   font-family: "Shanti", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
-body {
-  background-color: #001f44;
-}
-
 #banner {
   width: 100%;
   height: 10em;
-  justify-content: center;
   display: flex;
 }
-#banner h1 {
-  font-size: 80px;
-  text-align: center;
+#banner nav {
+  width: 100%;
+}
+#banner nav ol {
+  justify-content: space-around;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+}
+#banner nav ol li {
+  float: left;
+}
+#banner nav ol li a {
+  display: block;
   color: white;
-  align-content: center;
+  text-align: center;
+  text-decoration: none;
+  padding: 14px 16px;
+  font-size: 80px;
+}
+#banner nav ol li a :hover {
+  background-color: black;
 }
 
 /*# sourceMappingURL=style.css.map */
