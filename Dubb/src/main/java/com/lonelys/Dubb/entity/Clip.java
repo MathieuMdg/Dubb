@@ -14,7 +14,7 @@ public class Clip {
     private Long clipID;
 
     private String clipTitle;
-    private double clipDuration;
+    private double clipDuration; // in seconds
 
     // ManyToOne towards Movie
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,9 +36,9 @@ public class Clip {
     // Constructors
     public Clip() { }
 
-    public Clip(String clipTitle, double clipDuration, Movie source) {
-        this.clipTitle = clipTitle;
-        this.clipDuration = clipDuration;
+    public Clip(String Clip_Title, double Clip_Duration, Movie source) {
+        this.clipTitle = Clip_Title;
+        this.clipDuration = Clip_Duration;
         this.sourceMovie = source;
     }
 
@@ -96,5 +96,4 @@ public class Clip {
     public String toString() {
         return "\"" + clipTitle + "\" from the movie: " + sourceMovie.getMovieTitle();
     }
-
 }

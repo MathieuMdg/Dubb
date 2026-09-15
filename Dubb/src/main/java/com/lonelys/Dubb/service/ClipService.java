@@ -4,9 +4,9 @@ import com.lonelys.Dubb.entity.Clip;
 import com.lonelys.Dubb.repository.ClipRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+@Service
 public class ClipService {
 
     // Attributes
@@ -22,8 +22,8 @@ public class ClipService {
     }
 
     //Methods
-    public List<Clip> getClips(){
-        return (List<Clip>) clipRepository.findAll();
+    public Iterable<Clip> getClips(){
+        return clipRepository.findAll();
     }
 
 
