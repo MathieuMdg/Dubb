@@ -41,9 +41,11 @@ public class Attempt {
     public Attempt() {
     }
 
-    public Attempt(Double globalScore, User user) {
-        this.globalScore = globalScore;
+    public Attempt(User user, Clip clip, String status, LocalDateTime startedAt) {
         this.user = user;
+        this.clip = clip;
+        this.status = status;
+        this.startedAt = startedAt;
     }
 
 

@@ -63,6 +63,8 @@ public class Clip {
         return attempts;
     }
 
+    public List<Segment> getSegments() {return segments;}
+
 
     // Setters
     public void setClipID(long clipID) {
@@ -85,6 +87,9 @@ public class Clip {
         this.attempts = attempts;
     }
 
+    public void setSegments(List<Segment> segments) {
+        this.segments = segments;
+    }
 
     // Methods
     @Override
