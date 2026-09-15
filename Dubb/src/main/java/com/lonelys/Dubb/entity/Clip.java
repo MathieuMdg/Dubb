@@ -27,6 +27,11 @@ public class Clip {
     @JsonIgnore
     private List<Attempt> attempts = new ArrayList<>();
 
+    // OneToMany towards Segment
+    @OneToMany(mappedBy = "clip", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Segment> segments = new ArrayList<>();
+
 
     // Constructors
     public Clip() { }
