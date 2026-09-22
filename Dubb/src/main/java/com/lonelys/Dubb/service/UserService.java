@@ -2,6 +2,7 @@ package com.lonelys.Dubb.service;
 
 import com.lonelys.Dubb.exception.DuplicateException;
 import com.lonelys.Dubb.exception.InvalidUserDataException;
+import com.lonelys.Dubb.exception.InvalidUserException;
 import com.lonelys.Dubb.repository.UserRepository;
 import com.lonelys.Dubb.entity.User;
 
@@ -69,7 +70,12 @@ public class UserService {
     }
 
     // Get all user
-    public List<User> getUsers(){
+    public List<User> getAllUsers(){
         return (List<User>) userRepository.findAll();
     }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new InvalidUserException("User not found with id: " + id));
+    }
+
 }

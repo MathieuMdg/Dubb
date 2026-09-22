@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dubb</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Dubb</h1>
+
+<section id="user-section">
+    <h2>1. User</h2>
+    <input id="username-input" placeholder="Username">
+    <input id="usermail-input" placeholder="Email">
+    <button id="create-user-btn">Create user</button>
+    <p id="user-status"></p>
+</section>
+
+<section id="clip-list-section" class="hidden">
+    <h2>2. Choose a clip</h2>
+    <div id="clip-list"></div>
+</section>
+
+<section id="original-video-section" class="hidden">
+    <h2>3. Watch the original clip</h2>
+    <video id="original-video" controls width="480"></video>
+    <br>
+    <button id="start-attempt-btn">Start dubbing</button>
+</section>
+
+<section id="recording-section" class="hidden">
+    <h2>4. Record your voice</h2>
+    <p id="segment-info"></p>
+    <video id="segment-video" width="480" controls></video>
+    <br>
+    <button id="record-btn">Start recording</button>
+    <button id="stop-btn" disabled>Stop recording</button>
+    <p id="recording-status"></p>
+</section>
+
+<section id="finalize-section" class="hidden">
+    <h2>5. Finish</h2>
+    <p id="progress-info"></p>
+    <button id="finalize-btn" disabled>Finalize</button>
+</section>
+
+<section id="result-section" class="hidden">
+    <h2>6. Result</h2>
+    <video id="final-video" controls width="480"></video>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>

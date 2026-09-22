@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+section {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    padding: 8px 16px;
+    margin: 5px 5px 5px 0;
+    cursor: pointer;
+}
+
+input {
+    padding: 6px;
+    margin: 5px 5px 5px 0;
+}
+
+.clip-item {
+    padding: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.clip-item:hover {
+    background: #f0f0f0;
+}
+
+#recording-status {
+    font-weight: bold;
+    color: red;
+}

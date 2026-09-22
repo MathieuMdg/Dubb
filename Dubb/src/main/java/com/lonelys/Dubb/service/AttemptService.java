@@ -107,4 +107,17 @@ public class AttemptService {
             throw new InvalidAttemptException("All dubbable segments must have a recording before finalizing");
         }
     }
+
+    public Attempt getAttemptById(Long attemptId) {
+        return attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new InvalidAttemptException("Attempt not found with id: " + attemptId));
+    }
+
+    public String getFinalVideoPath(Long attemptId) {
+        Attempt attempt = getAttemptById(attemptId);
+        if (attempt.getFinalVideoPath() == null) {
+            throw new InvalidAttemptException("Attempt " + attemptId + " has no final video yet");
+        }
+        return attempt.getFinalVideoPath();
+    }
 }
