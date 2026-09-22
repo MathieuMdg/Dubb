@@ -1,36 +1,54 @@
 package com.lonelys.Dubb.dto;
 
-import com.lonelys.Dubb.entity.Segment;
-
 import java.util.List;
 
 public class AttemptProgressDto {
 
-    private final int totalSegmentsDubbables;
-    private final int segmentsEnregistres;
-    private final List<Segment> segmentsManquants;
-    private final boolean complete;
+    private int totalDubbableSegments;
+    private int recordedSegments;
+    private List<Long> missingSegmentIds;
+    private boolean complete;
 
-    public AttemptProgressDto(int totalSegmentsDubbables, int segmentsEnregistres, List<Segment> segmentsManquants, boolean complete) {
-        this.totalSegmentsDubbables = totalSegmentsDubbables;
-        this.segmentsEnregistres = segmentsEnregistres;
-        this.segmentsManquants = segmentsManquants;
+    public AttemptProgressDto() {
+    }
+
+    public AttemptProgressDto(int totalDubbableSegments, int recordedSegments,
+                              List<Long> missingSegmentIds, boolean complete) {
+        this.totalDubbableSegments = totalDubbableSegments;
+        this.recordedSegments = recordedSegments;
+        this.missingSegmentIds = missingSegmentIds;
         this.complete = complete;
     }
 
-    public int getTotalSegmentsDubbables() {
-        return totalSegmentsDubbables;
+    public int getTotalDubbableSegments() {
+        return totalDubbableSegments;
     }
 
-    public int getSegmentsEnregistres() {
-        return segmentsEnregistres;
+    public void setTotalDubbableSegments(int totalDubbableSegments) {
+        this.totalDubbableSegments = totalDubbableSegments;
     }
 
-    public List<Segment> getSegmentsManquants() {
-        return segmentsManquants;
+    public int getRecordedSegments() {
+        return recordedSegments;
+    }
+
+    public void setRecordedSegments(int recordedSegments) {
+        this.recordedSegments = recordedSegments;
+    }
+
+    public List<Long> getMissingSegmentIds() {
+        return missingSegmentIds;
+    }
+
+    public void setMissingSegmentIds(List<Long> missingSegmentIds) {
+        this.missingSegmentIds = missingSegmentIds;
     }
 
     public boolean isComplete() {
         return complete;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
     }
 }

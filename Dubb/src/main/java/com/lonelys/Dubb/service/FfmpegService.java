@@ -120,71 +120,43 @@ public class FfmpegService {
 
     //Extracts a specific part of the original audio.
     private void extractAudioSegment(String sourceVideoPath, double start, double end, String outputPath) {
-
         double duration = end - start;
-        List<String> command = List.of("ffmpeg", "-y", "-i", sourceVideoPath, "-ss", String.valueOf(start), "-t", String.valueOf(duration), "-vn", "-acodec", "pcm_s16le", outputPath);
-
+        List<String> command = List.of(
+                "ffmpeg", "-y", "-i", sourceVideoPath,
+                "-ss", String.valueOf(start), "-t", String.valueOf(duration),
+                "-vn", "-ar", "48000", "-ac", "2", "-acodec", "pcm_s16le",
+                outputPath
+        );
         runCommand(command, "extractAudioSegment");
     }
 
     //Extracts the original audio from a given position until the end.
     private void extractAudioFrom(String sourceVideoPath, double start, String outputPath) {
-
         List<String> command = List.of(
-                "ffmpeg",
-                "-y",
-                "-ss",
-                String.valueOf(start),
-                "-i",
-                sourceVideoPath,
-                "-vn",
-                "-acodec",
-                "pcm_s16le",
+                "ffmpeg", "-y", "-ss", String.valueOf(start), "-i", sourceVideoPath,
+                "-vn", "-ar", "48000", "-ac", "2", "-acodec", "pcm_s16le",
                 outputPath
         );
-
         runCommand(command, "extractAudioFrom");
     }
 
-    private void extractFullAudio(
-            String sourceVideoPath,
-            String outputPath) {
-
+    private void extractFullAudio(String sourceVideoPath, String outputPath) {
         List<String> command = List.of(
-                "ffmpeg",
-                "-y",
-                "-i",
-                sourceVideoPath,
-                "-vn",
-                "-acodec",
-                "pcm_s16le",
+                "ffmpeg", "-y", "-i", sourceVideoPath,
+                "-vn", "-ar", "48000", "-ac", "2", "-acodec", "pcm_s16le",
                 outputPath
         );
-
         runCommand(command, "extractFullAudio");
     }
 
-    private void normalizeRecording(
-            String inputPath,
-            String outputPath,
-            double expectedDuration) {
-
+    private void normalizeRecording(String inputPath, String outputPath, double expectedDuration) {
         List<String> command = List.of(
-                "ffmpeg",
-                "-y",
-                "-i",
-                inputPath,
-                "-t",
-                String.valueOf(expectedDuration),
-                "-ar",
-                "48000",
-                "-ac",
-                "2",
-                "-acodec",
-                "pcm_s16le",
+                "ffmpeg", "-y", "-i", inputPath,
+                "-af", "apad",
+                "-t", String.valueOf(expectedDuration),
+                "-ar", "48000", "-ac", "2", "-acodec", "pcm_s16le",
                 outputPath
         );
-
         runCommand(command, "normalizeRecording");
     }
 

@@ -33,8 +33,8 @@ public class ClipService {
     }
 
     //Methods
-    public Iterable<Clip> getClips() {
-        return clipRepository.findAll();
+    public List<Clip> getClips() {
+        return (List<Clip>) clipRepository.findAll();
     }
 
     public Clip createClip(Long movieId, String title, double duration, MultipartFile video){

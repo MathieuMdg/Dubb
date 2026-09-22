@@ -1,6 +1,7 @@
 package com.lonelys.Dubb.controller;
 
-import com.lonelys.Dubb.dto.ClipDTO;
+import com.lonelys.Dubb.dto.ClipDto;
+import com.lonelys.Dubb.dto.DtoMapper;
 import com.lonelys.Dubb.entity.Clip;
 import com.lonelys.Dubb.service.ClipService;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +19,12 @@ public class ClipController {
     }
 
     @GetMapping
-    public Iterable<ClipDTO> getClips(){
-        Iterable<Clip> clips = clipService.getClips();
-        List<ClipDTO> result = new ArrayList<>();
+    public List<ClipDto> getClips() {
+        List<Clip> clips = clipService.getClips();
+        List<ClipDto> result = new ArrayList<>();
 
-        for (Clip clip : clips){
-            result.add(new ClipDTO(clip));
+        for (Clip clip : clips) {
+            result.add(DtoMapper.toDto(clip));
         }
 
         return result;

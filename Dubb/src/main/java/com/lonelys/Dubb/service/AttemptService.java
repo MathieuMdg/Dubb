@@ -47,15 +47,29 @@ public class AttemptService {
     @Transactional(readOnly = true)
     public AttemptProgressDto getProgression(Long attemptId) {
 
-        Attempt attempt = attemptRepository.findById(attemptId).orElseThrow(() -> new InvalidAttemptException("Attempt not found with id: " + attemptId));
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new InvalidAttemptException("Attempt not found with id: " + attemptId));
 
-        List<Segment> segmentsDubbables = attempt.getClip().getSegments().stream().filter(Segment::isDubbable).collect(Collectors.toList());
-        List<Long> segmentsEnregistresIds = attempt.getRecordings().stream().map(recording -> recording.getSegment().getSegmentID()).collect(Collectors.toList());
-        List<Segment> segmentsManquants = segmentsDubbables.stream().filter(segment -> !segmentsEnregistresIds.contains(segment.getSegmentID())).collect(Collectors.toList());
+        List<Segment> segmentsDubbables = attempt.getClip().getSegments().stream()
+                .filter(Segment::isDubbable)
+                .collect(Collectors.toList());
 
-        boolean complete = segmentsManquants.isEmpty();
+        List<Long> segmentsEnregistresIds = attempt.getRecordings().stream()
+                .map(recording -> recording.getSegment().getSegmentID())
+                .collect(Collectors.toList());
 
-        return new AttemptProgressDto(segmentsDubbables.size(), segmentsDubbables.size() - segmentsManquants.size(), segmentsManquants, complete
+        List<Long> segmentsManquantsIds = segmentsDubbables.stream()
+                .map(Segment::getSegmentID)
+                .filter(id -> !segmentsEnregistresIds.contains(id))
+                .collect(Collectors.toList());
+
+        boolean complete = segmentsManquantsIds.isEmpty();
+
+        return new AttemptProgressDto(
+                segmentsDubbables.size(),
+                segmentsDubbables.size() - segmentsManquantsIds.size(),
+                segmentsManquantsIds,
+                complete
         );
     }
 
