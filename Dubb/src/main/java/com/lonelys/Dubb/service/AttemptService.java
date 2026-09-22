@@ -17,18 +17,21 @@ import java.util.stream.Collectors;
 @Service
 public class AttemptService {
 
+    // Attributes
     private static final Logger log = LoggerFactory.getLogger(AttemptService.class);
 
     private final AttemptRepository attemptRepository;
     private final UserRepository userRepository;
     private final ClipRepository clipRepository;
 
+    // Constructor
     public AttemptService(AttemptRepository attemptRepository, UserRepository userRepository, ClipRepository clipRepository) {
         this.attemptRepository = attemptRepository;
         this.userRepository = userRepository;
         this.clipRepository = clipRepository;
     }
 
+    // Methods
     public Attempt startAttempt(Long userId, Long clipId) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new InvalidUserException("User not found with id: " + userId));
@@ -81,12 +84,12 @@ public class AttemptService {
 
     private void checkAllSegmentRecordings(Attempt attempt) {
 
-        long nombreSegmentsDubbables = attempt.getClip().getSegments().stream().filter(Segment::isDubbable).count();
-        long nombreEnregistrements = attempt.getRecordings().size();
+        long numberDubbableSegment = attempt.getClip().getSegments().stream().filter(Segment::isDubbable).count();
+        long numberRecordings = attempt.getRecordings().size();
 
-        if (nombreSegmentsDubbables != nombreEnregistrements) {
+        if (numberDubbableSegment != numberRecordings) {
             log.warn("Attempt {} incomplete: {} dubbable segments, {} recordings",
-                    attempt.getAttemptID(), nombreSegmentsDubbables, nombreEnregistrements);
+                    attempt.getAttemptID(), numberDubbableSegment, numberRecordings);
             throw new InvalidAttemptException("All dubbable segments must have a recording before finalizing");
         }
     }

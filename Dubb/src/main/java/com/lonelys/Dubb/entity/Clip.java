@@ -14,6 +14,7 @@ public class Clip {
     private Long clipID;
 
     private String clipTitle;
+    private String VideoFilePath;
     private double clipDuration; // in seconds
 
     // ManyToOne towards Movie
@@ -36,9 +37,9 @@ public class Clip {
     // Constructors
     public Clip() { }
 
-    public Clip(String Clip_Title, double Clip_Duration, Movie source) {
-        this.clipTitle = Clip_Title;
-        this.clipDuration = Clip_Duration;
+    public Clip(String clipTitle, double clipDuration, Movie source) {
+        this.clipTitle = clipTitle;
+        this.clipDuration = clipDuration;
         this.sourceMovie = source;
     }
 
@@ -64,6 +65,10 @@ public class Clip {
     }
 
     public List<Segment> getSegments() {return segments;}
+
+    public String getVideoFilePath() {
+        return VideoFilePath;
+    }
 
 
     // Setters
@@ -91,9 +96,18 @@ public class Clip {
         this.segments = segments;
     }
 
+    public void setVideoFilePath(String videoFilePath) {
+        VideoFilePath = videoFilePath;
+    }
+
+    public void setClipID(Long clipID) {
+        this.clipID = clipID;
+    }
+
     // Methods
     @Override
     public String toString() {
         return "\"" + clipTitle + "\" from the movie: " + sourceMovie.getMovieTitle();
     }
+
 }
