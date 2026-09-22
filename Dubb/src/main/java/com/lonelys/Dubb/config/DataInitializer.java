@@ -2,25 +2,31 @@ package com.lonelys.Dubb.config;
 
 import com.lonelys.Dubb.entity.Clip;
 import com.lonelys.Dubb.entity.Movie;
+import com.lonelys.Dubb.entity.User;
 import com.lonelys.Dubb.repository.ClipRepository;
 import com.lonelys.Dubb.repository.MovieRepository;
+import com.lonelys.Dubb.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
 
     private final MovieRepository movieRepository;
     private final ClipRepository clipRepository;
+    private final UserRepository userRepository;
 
-    public DataInitializer(MovieRepository movieRepository, ClipRepository clipRepository) {
+    public DataInitializer(MovieRepository movieRepository, ClipRepository clipRepository, UserRepository userRepository) {
         this.movieRepository = movieRepository;
         this.clipRepository = clipRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void run(String... args) {
-        if (movieRepository.count() == 0) { // Checking if the database isn't already populated
+        if (movieRepository.count() == 0 && clipRepository.count() == 0 && userRepository.count() == 0) { // Checking if the database isn't already populated
 
             // new movies
             Movie shrek = new Movie("Shrek 2", 2004, "Andrew Adamson");
@@ -62,6 +68,14 @@ public class DataInitializer implements CommandLineRunner {
             clipRepository.save(clip6);
             clipRepository.save(clip7);
             clipRepository.save(clip8);
+
+            // new users
+            User lion = new User("Nightfury 2x2", "deuxfoisdeux@mdgcorp.com", LocalDate.now());
+            User nat = new User("L'incarnation du tigre blanc", "natsukimdg@mdgcorp.com", LocalDate.now());
+
+            // saving the users
+            userRepository.save(lion);
+            userRepository.save(nat);
         }
     }
 }
