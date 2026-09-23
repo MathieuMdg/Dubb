@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -61,5 +63,15 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message) {
         ErrorResponse error = new ErrorResponse(status.value(), status.getReasonPhrase(), message);
         return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(AsyncRequestNotUsableException.class)
+    public void handleClientAbort(AsyncRequestNotUsableException ex) {
+        log.debug("Client closed the connection during streaming, ignoring: {}", ex.getMessage());
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public void handleNoResource(NoResourceFoundException ex) {
+        log.debug("Static resource not found, ignoring: {}", ex.getMessage());
     }
 }

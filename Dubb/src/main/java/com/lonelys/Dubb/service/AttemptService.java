@@ -23,12 +23,14 @@ public class AttemptService {
     private final AttemptRepository attemptRepository;
     private final UserRepository userRepository;
     private final ClipRepository clipRepository;
+    private final FfmpegService ffmpegService;
 
     // Constructor
-    public AttemptService(AttemptRepository attemptRepository, UserRepository userRepository, ClipRepository clipRepository) {
+    public AttemptService(AttemptRepository attemptRepository, UserRepository userRepository, ClipRepository clipRepository, FfmpegService ffmpegService) {
         this.attemptRepository = attemptRepository;
         this.userRepository = userRepository;
         this.clipRepository = clipRepository;
+        this.ffmpegService = ffmpegService;
     }
 
     // Methods
@@ -85,8 +87,9 @@ public class AttemptService {
 
         checkAllSegmentRecordings(attempt);
 
-        // String finalVideoPath = ffmpegService.assemblerVideo(attempt);
-        // attempt.setFinalVideoPath(finalVideoPath);
+        String finalAudioPath = ffmpegService.createFinalAudio(attemptId);
+        String finalVideoPath = ffmpegService.exportFinalVideo(attemptId, finalAudioPath);
+        attempt.setFinalVideoPath(finalVideoPath);
 
         attempt.setStatus("COMPLETED");
         attempt.setCompletedAt(LocalDateTime.now());
