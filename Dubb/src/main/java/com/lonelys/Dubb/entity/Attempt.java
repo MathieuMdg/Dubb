@@ -19,6 +19,7 @@ public class Attempt {
     private String status;
     private String finalVideoPath;
     private Double globalScore;
+    private String label;
 
     // ManyToOne towards User
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,11 +42,12 @@ public class Attempt {
     public Attempt() {
     }
 
-    public Attempt(User user, Clip clip, String status, LocalDateTime startedAt) {
+    public Attempt(User user, Clip clip, String status, LocalDateTime startedAt, String label) {
         this.user = user;
         this.clip = clip;
         this.status = status;
         this.startedAt = startedAt;
+        this.label = label;
     }
 
 
@@ -86,6 +88,10 @@ public class Attempt {
         return clip;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
 
     // Setters
     public void setAttemptID(Long attemptId) {
@@ -118,6 +124,10 @@ public class Attempt {
 
     public void setGlobalScore(Double globalScore) {
         this.globalScore = globalScore;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public void setStartedAt(LocalDateTime startedAt) {

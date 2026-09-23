@@ -49,7 +49,7 @@ public class SegmentRecordingService {
             storageService.delete(alreadyExist.get().getAudioFilePath());
         }
 
-        String subFolder = "attempts/" + attemptId;
+        String subFolder = "attempts/" + attemptId + "/segments";
         String audioPath = storageService.save(audio, subFolder);
 
         SegmentRecording recording = alreadyExist.orElseGet(SegmentRecording::new);

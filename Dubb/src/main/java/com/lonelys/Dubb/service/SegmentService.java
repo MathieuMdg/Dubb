@@ -25,16 +25,20 @@ public class SegmentService {
 
     //Methods
     //Create a Segment and add it to the database
-    public Segment createSegment(Clip clip, double startTime, double endTime, int orderIndex, boolean dubbable) {
-
+    public Segment createSegment(Clip clip, double startTime, double endTime, int orderIndex, boolean dubbable, String label) {
         if (clip == null) {
             throw new InvalidSegmentException("Clip must not be null");
         }
 
-        Segment segment = new Segment(clip, startTime, endTime, orderIndex, dubbable);
+        if (label == null || label.isBlank()) {
+            label = "Segment " + orderIndex + " (" + startTime + "s-" + endTime + "s)";
+        }
+
+        Segment segment = new Segment(clip, startTime, endTime, orderIndex, dubbable, label);
+
         Segment savedSegment = segmentRepository.save(segment);
-        log.info("Segment created {}", segment);
-        return segment;
+        log.info("Segment created {}", savedSegment);
+        return savedSegment;
     }
 
     public List<Segment> getSegmentByClip(Clip clip) {

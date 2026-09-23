@@ -28,7 +28,7 @@ public class SegmentController {
     public SegmentDto createSegment(@PathVariable Long clipId, @RequestBody CreateSegmentRequest request) {
         Clip clip = clipService.getClipById(clipId);
         Segment segment = segmentService.createSegment(clip, request.getStartTime(), request.getEndTime(),
-                request.getOrderIndex(), request.isDubbable());
+                request.getOrderIndex(), request.isDubbable(), request.getLabel());
         return DtoMapper.toDto(segment);
     }
 

@@ -7,19 +7,19 @@ public class SegmentDto {
     private double endTime;
     private int orderIndex;
     private boolean dubbable;
-    private String character;
+    private String label;
 
     public SegmentDto() {
     }
 
     public SegmentDto(Long segmentId, double startTime, double endTime,
-                      int orderIndex, boolean dubbable) {
+                      int orderIndex, boolean dubbable, String label) {
         this.segmentId = segmentId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.orderIndex = orderIndex;
         this.dubbable = dubbable;
-        this.character = character;
+        this.label = label;
     }
 
     public Long getSegmentId() {
@@ -62,7 +62,11 @@ public class SegmentDto {
         this.dubbable = dubbable;
     }
 
-    public void setCharacter(String character) {
-        this.character = character;
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
     }
 }

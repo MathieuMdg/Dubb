@@ -6,18 +6,18 @@ public class CreateSegmentRequest {
     private double endTime;
     private int orderIndex;
     private boolean dubbable;
-    private String character;
+    private String label;
 
     public CreateSegmentRequest() {
     }
 
     public CreateSegmentRequest(double startTime, double endTime, int orderIndex,
-                                boolean dubbable, String character) {
+                                boolean dubbable, String label) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.orderIndex = orderIndex;
         this.dubbable = dubbable;
-        this.character = character;
+        this.label = label;
     }
 
     public double getStartTime() {
@@ -52,11 +52,11 @@ public class CreateSegmentRequest {
         this.dubbable = dubbable;
     }
 
-    public String getCharacter() {
-        return character;
+    public String getLabel() {
+        return label;
     }
 
-    public void setCharacter(String character) {
-        this.character = character;
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

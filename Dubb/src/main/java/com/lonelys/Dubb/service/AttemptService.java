@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,9 @@ public class AttemptService {
         User user = userRepository.findById(userId).orElseThrow(() -> new InvalidUserException("User not found with id: " + userId));
         Clip clip = clipRepository.findById(clipId).orElseThrow(() -> new InvalidClipException("Clip not found with id: " + clipId));
 
-        Attempt attempt = new Attempt(user, clip, "IN_PROGRESS", LocalDateTime.now());
+        Attempt attempt = new Attempt(user, clip, "IN_PROGRESS", LocalDateTime.now(), "");
+        attempt.setLabel(clip.getClipTitle() + " - " + user.getUsername() + " - " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM HH:mm")));
+
         Attempt savedAttempt = attemptRepository.save(attempt);
 
         log.info("Attempt created {}", savedAttempt);

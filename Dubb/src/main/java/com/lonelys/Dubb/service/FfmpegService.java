@@ -106,8 +106,10 @@ public class FfmpegService {
             audioChunkPaths.add(durationFileAbsolutePath);
         }
 
-        String finalRelativePath = "attempts/" + attempt.getAttemptID() + "/final_" + UUID.randomUUID() + ".wav";
+        String finalRelativePath = "attempts/" + attempt.getAttemptID() + "/final/audio_" + UUID.randomUUID() + ".wav";
         String finalAbsolutePath = resolveAbsolutePath(finalRelativePath);
+
+        createWorkingDirectory("attempts/" + attempt.getAttemptID() + "/final");
 
         concatenateAudio(audioChunkPaths, finalAbsolutePath);
         cleanupWorkingDirectory(workingDir);
@@ -401,12 +403,14 @@ public class FfmpegService {
         String finalRelativePath =
                 "attempts/"
                         + attempt.getAttemptID()
-                        + "/final_"
+                        + "/final/video_"
                         + UUID.randomUUID()
                         + ".mp4";
 
         String finalAbsolutePath =
                 resolveAbsolutePath(finalRelativePath);
+
+        createWorkingDirectory("attempts/" + attempt.getAttemptID() + "/final");
 
         List<String> command = List.of(
                 "ffmpeg",

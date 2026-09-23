@@ -17,7 +17,7 @@ public class DtoMapper {
 
     public static SegmentDto toDto(Segment segment) {
         return new SegmentDto(segment.getSegmentID(), segment.getStartTime(), segment.getEndTime(),
-                segment.getOrderIndex(), segment.isDubbable());
+                segment.getOrderIndex(), segment.isDubbable(), segment.getLabel());
     }
 
     public static ClipDto toDto(Clip clip) {
@@ -38,6 +38,6 @@ public class DtoMapper {
                 .collect(Collectors.toList());
         return new AttemptDto(attempt.getAttemptID(), attempt.getUser().getUserID(), attempt.getClip().getClipID(),
                 attempt.getStatus(), attempt.getStartedAt(), attempt.getCompletedAt(),
-                attempt.getGlobalScore(), recordingDtos);
+                attempt.getGlobalScore(), recordingDtos, attempt.getLabel());
     }
 }

@@ -12,6 +12,7 @@ public class AttemptDto {
     private LocalDateTime startedAt;
     private LocalDateTime completedAt;
     private Double globalScore;
+    private String label;
     private List<SegmentRecordingDto> recordings;
 
     public AttemptDto() {
@@ -19,7 +20,7 @@ public class AttemptDto {
 
     public AttemptDto(Long attemptId, Long userId, Long clipId, String status,
                       LocalDateTime startedAt, LocalDateTime completedAt,
-                      Double globalScore, List<SegmentRecordingDto> recordings) {
+                      Double globalScore, List<SegmentRecordingDto> recordings, String label) {
         this.attemptId = attemptId;
         this.userId = userId;
         this.clipId = clipId;
@@ -28,6 +29,7 @@ public class AttemptDto {
         this.completedAt = completedAt;
         this.globalScore = globalScore;
         this.recordings = recordings;
+        this.label = label;
     }
 
     public Long getAttemptId() {
@@ -92,5 +94,13 @@ public class AttemptDto {
 
     public void setRecordings(List<SegmentRecordingDto> recordings) {
         this.recordings = recordings;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

@@ -15,6 +15,7 @@ public class Segment {
     private double endTime;
     private int orderIndex;
     private boolean dubbable;
+    private String label;
 
     // ManyToOne towards Clip
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,12 +26,13 @@ public class Segment {
     // Constructors
     public Segment(){}
 
-    public Segment(Clip clip, double startTime, double endTime, int orderIndex, boolean dubbable){
+    public Segment(Clip clip, double startTime, double endTime, int orderIndex, boolean dubbable, String label){
         this.clip = clip;
         this.dubbable = dubbable;
         this.endTime = endTime;
         this.orderIndex = orderIndex;
         this.startTime = startTime;
+        this.label = label;
     }
 
     // Getters
@@ -56,6 +58,10 @@ public class Segment {
 
     public boolean isDubbable() {
         return dubbable;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
 
@@ -84,5 +90,8 @@ public class Segment {
         this.segmentID = segmentID;
     }
 
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
 }
