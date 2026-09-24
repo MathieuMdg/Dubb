@@ -1,54 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dubb</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Bungee&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Dubb</h1>
+<header class="entete">
+    <a class="logo" href="#" id="logo-link">🎙 DUBB</a>
+    <nav class="nav" id="main-nav">
+        <a href="#" data-page="page-clips" class="nav-link hidden">Clips</a>
+        <a href="#" data-page="page-history" class="nav-link hidden">Mon historique</a>
+        <button class="lien-bouton hidden" id="logout-btn">Déconnexion</button>
+    </nav>
+</header>
 
-<section id="user-section">
-    <h2>1. User</h2>
-    <input id="username-input" placeholder="Username">
-    <input id="usermail-input" placeholder="Email">
-    <button id="create-user-btn">Create user</button>
-    <p id="user-status"></p>
-</section>
+<div class="page">
 
-<section id="clip-list-section" class="hidden">
-    <h2>2. Choose a clip</h2>
-    <div id="clip-list"></div>
-</section>
+    <!-- PAGE LOGIN / REGISTER -->
+    <section class="page-view active" id="page-auth">
+        <div class="hero">
+            <span class="hero-bruit">DUBB</span>
+            <h1>Deviens la voix<br>de tes scènes préférées</h1>
+            <p>Choisis un extrait, enregistre-toi par-dessus, écoute le résultat.</p>
+        </div>
 
-<section id="original-video-section" class="hidden">
-    <h2>3. Watch the original clip</h2>
-    <video id="original-video" controls width="480"></video>
-    <br>
-    <button id="start-attempt-btn">Start dubbing</button>
-</section>
+        <div class="auth-tabs">
+            <button class="filtre actif" id="tab-login">Connexion</button>
+            <button class="filtre" id="tab-register">Créer un compte</button>
+        </div>
 
-<section id="recording-section" class="hidden">
-    <h2>4. Record your voice</h2>
-    <p id="segment-info"></p>
-    <video id="segment-video" width="480" controls></video>
-    <br>
-    <button id="record-btn">Start recording</button>
-    <button id="stop-btn" disabled>Stop recording</button>
-    <p id="recording-status"></p>
-</section>
+        <form class="formulaire" id="login-form">
+            <p class="message message-erreur hidden" id="login-error"></p>
+            <label>
+                Pseudo
+                <input id="login-username" type="text" autocomplete="username" required>
+            </label>
+            <label>
+                Email
+                <input id="login-mail" type="email" autocomplete="email" required>
+            </label>
+            <button type="submit" class="bouton">Se connecter</button>
+        </form>
 
-<section id="finalize-section" class="hidden">
-    <h2>5. Finish</h2>
-    <p id="progress-info"></p>
-    <button id="finalize-btn" disabled>Finalize</button>
-</section>
+        <form class="formulaire hidden" id="register-form">
+            <p class="message message-erreur hidden" id="register-error"></p>
+            <label>
+                Pseudo
+                <input id="register-username" type="text" autocomplete="username" required>
+            </label>
+            <label>
+                Email
+                <input id="register-mail" type="email" autocomplete="email" required>
+            </label>
+            <button type="submit" class="bouton">Créer mon compte</button>
+        </form>
+    </section>
 
-<section id="result-section" class="hidden">
-    <h2>6. Result</h2>
-    <video id="final-video" controls width="480"></video>
-</section>
+    <!-- PAGE CLIP LIST -->
+    <section class="page-view" id="page-clips">
+        <h1>Choisis ton clip</h1>
+        <p class="intro">Sélectionne une scène à doubler.</p>
+        <div class="grille" id="clip-grid"></div>
+    </section>
+
+    <!-- PAGE PREVIEW -->
+    <section class="page-view" id="page-preview">
+        <a href="#" class="retour" id="preview-back-btn">← Retour aux clips</a>
+        <h1 id="preview-title">Titre du clip</h1>
+        <div class="video-cadre">
+            <video id="original-video" controls></video>
+        </div>
+        <div class="hero-actions">
+            <button class="bouton" id="start-attempt-btn">🎙 Commencer le doublage</button>
+        </div>
+    </section>
+
+    <!-- PAGE RECORD -->
+    <section class="page-view" id="page-record">
+        <div class="progress-track" id="progress-track"></div>
+        <h1 id="segment-label">Segment</h1>
+        <p class="intro" id="segment-timerange"></p>
+
+        <div class="video-cadre video-cadre--segment">
+            <video id="segment-video" playsinline></video>
+            <div class="video-overlay" id="video-overlay">
+                <button class="btn-rejouer" id="preview-segment-btn" title="Revoir le passage">▶</button>
+            </div>
+            <div class="rec-indicator hidden" id="rec-indicator">
+                <span class="rec-dot"></span> Enregistrement
+            </div>
+        </div>
+
+        <div class="record-controls">
+            <button class="btn-record" id="record-btn">
+                <span class="record-icon"></span>
+                <span id="record-btn-label">Enregistrer</span>
+            </button>
+
+            <div class="post-record-actions hidden" id="post-record-actions">
+                <button class="bouton bouton-clair" id="rerecord-btn">↺ Recommencer</button>
+                <button class="bouton" id="next-segment-btn">Segment suivant →</button>
+                <button class="bouton hidden" id="finalize-btn">✓ Finaliser le doublage</button>
+            </div>
+        </div>
+
+        <p class="aide" id="recording-status"></p>
+    </section>
+
+    <!-- PAGE PROCESSING -->
+    <section class="page-view" id="page-processing">
+        <div class="processing-box">
+            <div class="spinner"></div>
+            <h2>Fabrication de ton doublage…</h2>
+            <p class="intro">Ça ne prend que quelques secondes.</p>
+        </div>
+    </section>
+
+    <!-- PAGE RESULT -->
+    <section class="page-view" id="page-result">
+        <h1>🎉 Ton doublage est prêt !</h1>
+        <p class="intro" id="result-label"></p>
+        <div class="video-cadre">
+            <video id="final-video" controls></video>
+        </div>
+        <div class="hero-actions">
+            <button class="bouton" id="download-btn">⬇ Télécharger</button>
+            <button class="bouton bouton-clair" id="restart-btn">Doubler un autre clip</button>
+        </div>
+    </section>
+
+    <!-- PAGE HISTORY -->
+    <section class="page-view" id="page-history">
+        <h1>Mon historique</h1>
+        <p class="intro">Retrouve tous tes doublages précédents.</p>
+        <div class="liste-panier" id="history-list"></div>
+        <p class="vide hidden" id="history-empty">Tu n'as pas encore fait de doublage.</p>
+    </section>
+
+</div>
+
+<footer class="pied">Dubb</footer>
 
 <script src="app.js"></script>
 </body>
