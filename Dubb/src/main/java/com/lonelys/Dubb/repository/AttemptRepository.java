@@ -17,4 +17,5 @@ public interface AttemptRepository extends CrudRepository<Attempt, Long> {
     List<Attempt> findByClip(Clip clip);
 
     Attempt getAttemptByAttemptID(Long attemptId);
+    List<Attempt> findByUserOrderByStartedAtDesc(User user);
 }

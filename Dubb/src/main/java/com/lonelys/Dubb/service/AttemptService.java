@@ -126,4 +126,10 @@ public class AttemptService {
         }
         return attempt.getFinalVideoPath();
     }
+
+    @Transactional(readOnly = true)
+    public List<Attempt> getAttemptsByUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new InvalidUserException("User not found with id: " + userId));
+        return attemptRepository.findByUserOrderByStartedAtDesc(user);
+    }
 }

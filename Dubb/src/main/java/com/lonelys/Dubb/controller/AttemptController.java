@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/attempts")
@@ -31,12 +33,14 @@ public class AttemptController {
         this.storageService = storageService;
     }
 
+    // Send a request to start an attempt
     @PostMapping
     public AttemptDto startAttempt(@RequestBody StartAttemptRequest request) {
         Attempt attempt = attemptService.startAttempt(request.getUserId(), request.getClipId());
         return DtoMapper.toDto(attempt);
     }
 
+    // Add an audio file to a segment for an attempt
     @PostMapping("/{attemptId}/segments/{segmentId}")
     public SegmentRecordingDto recordSegment(@PathVariable Long attemptId,
                                              @PathVariable Long segmentId,
@@ -45,21 +49,31 @@ public class AttemptController {
         return DtoMapper.toDto(recording);
     }
 
+    // Get the statut of an attempt
     @GetMapping("/{attemptId}/progress")
     public AttemptProgressDto getProgression(@PathVariable Long attemptId) {
         return attemptService.getProgression(attemptId);
     }
 
+    // Create the final video file
     @PostMapping("/{attemptId}/finalize")
     public AttemptDto finalizeAttempt(@PathVariable Long attemptId) {
         Attempt attempt = attemptService.finaliseAttempt(attemptId);
         return DtoMapper.toDto(attempt);
     }
 
+    // Get the final video file
     @GetMapping("/{attemptId}/final-video")
     public ResponseEntity<Resource> streamFinalVideo(@PathVariable Long attemptId) {
         File videoFile = storageService.get(attemptService.getFinalVideoPath(attemptId));
         Resource resource = new FileSystemResource(videoFile);
         return ResponseEntity.ok().contentType(MediaType.valueOf("video/mp4")).body(resource);
+    }
+
+    @GetMapping
+    public List<AttemptDto> getAttemptsByUser(@RequestParam Long userId) {
+        return attemptService.getAttemptsByUser(userId).stream()
+                .map(DtoMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

@@ -2,6 +2,7 @@ package com.lonelys.Dubb.controller;
 
 import com.lonelys.Dubb.dto.CreateUserRequest;
 import com.lonelys.Dubb.dto.DtoMapper;
+import com.lonelys.Dubb.dto.LoginRequest;
 import com.lonelys.Dubb.dto.UserDto;
 import com.lonelys.Dubb.entity.User;
 import com.lonelys.Dubb.service.UserService;
@@ -37,5 +38,11 @@ public class UserController {
         return userService.getAllUsers().stream()
                 .map(DtoMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @PostMapping("/login")
+    public UserDto login(@RequestBody LoginRequest request) {
+        User user = userService.login(request.getUsername(), request.getUserMail());
+        return DtoMapper.toDto(user);
     }
 }

@@ -78,4 +78,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new InvalidUserException("User not found with id: " + id));
     }
 
+    public User login(String username, String userMail) {
+        return userRepository.findByUsername(username)
+                .filter(user -> user.getUserMail().equals(userMail))
+                .orElseThrow(() -> new InvalidUserException("Aucun compte ne correspond à ce pseudo et cet email"));
+    }
+
 }

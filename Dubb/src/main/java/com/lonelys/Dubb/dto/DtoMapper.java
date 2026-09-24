@@ -38,6 +38,6 @@ public class DtoMapper {
                 .collect(Collectors.toList());
         return new AttemptDto(attempt.getAttemptID(), attempt.getUser().getUserID(), attempt.getClip().getClipID(),
                 attempt.getStatus(), attempt.getStartedAt(), attempt.getCompletedAt(),
-                attempt.getGlobalScore(), recordingDtos, attempt.getLabel());
+                attempt.getGlobalScore(), recordingDtos, attempt.getLabel(), attempt.getClip().getClipTitle());
     }
 }
