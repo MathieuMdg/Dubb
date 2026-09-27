@@ -75,21 +75,27 @@ public class FfmpegService {
             }
 
             if (start > cursor) {
-
+                // Trou non-dubbable avant ce segment : gardé tel quel (audio original)
                 String originalChunkRelativePath = workingDir + "/original_" + UUID.randomUUID() + ".wav";
                 String originalChunkAbsolutePath = resolveAbsolutePath(originalChunkRelativePath);
                 extractAudioSegment(originalVideoPath, cursor, start, originalChunkAbsolutePath);
-
                 audioChunkPaths.add(originalChunkAbsolutePath);
             }
+
+            String originalSegRelativePath = workingDir + "/original_seg_" + segment.getOrderIndex() + "_" + UUID.randomUUID() + ".wav";
+            String originalSegAbsolutePath = resolveAbsolutePath(originalSegRelativePath);
+            extractAudioSegment(originalVideoPath, start, end, originalSegAbsolutePath);
 
             String recordingAudioPath = resolveAbsolutePath(recording.getAudioFilePath());
             String recordingChunkRelativePath = workingDir + "/recording_" + segment.getOrderIndex() + "_" + UUID.randomUUID() + ".wav";
             String recordingChunkAbsolutePath = resolveAbsolutePath(recordingChunkRelativePath);
-
             normalizeRecording(recordingAudioPath, recordingChunkAbsolutePath, end - start);
 
-            audioChunkPaths.add(recordingChunkAbsolutePath);
+            String mixedRelativePath = workingDir + "/mixed_" + segment.getOrderIndex() + "_" + UUID.randomUUID() + ".wav";
+            String mixedAbsolutePath = resolveAbsolutePath(mixedRelativePath);
+            mixSegmentAudio(originalSegAbsolutePath, recordingChunkAbsolutePath, mixedAbsolutePath);
+
+            audioChunkPaths.add(mixedAbsolutePath);
             cursor = end;
         }
 
@@ -440,5 +446,17 @@ public class FfmpegService {
         );
 
         return finalRelativePath;
+    }
+
+    private void mixSegmentAudio(String originalPath, String recordingPath, String outputPath) {
+        List<String> command = List.of(
+                "ffmpeg", "-y",
+                "-i", originalPath,
+                "-i", recordingPath,
+                "-filter_complex", "[0:a][1:a]amix=inputs=2:duration=first:dropout_transition=0:normalize=0",
+                "-ar", "48000", "-ac", "2", "-acodec", "pcm_s16le",
+                outputPath
+        );
+        runCommand(command, "mixSegmentAudio");
     }
 }
