@@ -6,6 +6,7 @@ import com.lonelys.Dubb.exception.ClipNotFoundException;
 import com.lonelys.Dubb.exception.InvalidClipException;
 import com.lonelys.Dubb.repository.ClipRepository;
 
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,14 +38,20 @@ public class ClipService {
         return (List<Clip>) clipRepository.findAll();
     }
 
-    public Clip createClip(Long movieId, String title, double duration, MultipartFile video){
+    public Clip createClip(Long movieId, String title, double duration, MultipartFile video, MultipartFile cleanVideo) {
         checkClipData(title, duration, video);
-        Movie source = movieService.getMovieById(movieId);
 
+        Movie source = movieService.getMovieById(movieId);
         String videoPath = storageService.save(video, "clips/" + movieId);
+
+        String cleanVideoPath = null;
+        if (cleanVideo != null && !cleanVideo.isEmpty()) {
+            cleanVideoPath = storageService.save(cleanVideo, "clips/" + movieId);
+        }
 
         Clip clip = new Clip(title, duration, source);
         clip.setVideoFilePath(videoPath);
+        clip.setCleanVideoFilePath(cleanVideoPath);
 
         Clip savedClip = clipRepository.save(clip);
         log.info("New Clip added : {}", savedClip);
@@ -70,6 +77,19 @@ public class ClipService {
         if (video == null || video.isEmpty()) {
             throw new InvalidClipException("Video file must not be empty");
         }
+    }
+
+    @Transactional
+    public Clip setCleanVideo(Long clipId, MultipartFile cleanVideo) {
+        if (cleanVideo == null || cleanVideo.isEmpty()) {
+            throw new InvalidClipException("Clean video file must not be empty");
+        }
+        Clip clip = getClipById(clipId);
+        String path = storageService.save(cleanVideo, "clips/" + clip.getSourceMovie().getMovieID());
+        clip.setCleanVideoFilePath(path);
+        Clip saved = clipRepository.save(clip);
+        log.info("Clean video set for clip {}", clipId);
+        return saved;
     }
 
 

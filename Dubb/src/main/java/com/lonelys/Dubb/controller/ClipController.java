@@ -33,9 +33,26 @@ public class ClipController {
     public ClipDto createClip(@RequestParam Long movieId,
                               @RequestParam String title,
                               @RequestParam double duration,
-                              @RequestParam MultipartFile video) {
-        Clip clip = clipService.createClip(movieId, title, duration, video);
+                              @RequestParam MultipartFile video,
+                              @RequestParam(required = false) MultipartFile cleanVideo) {
+        Clip clip = clipService.createClip(movieId, title, duration, video, cleanVideo);
         return DtoMapper.toDto(clip);
+    }
+
+    @GetMapping("/{id}/clean-video")
+    public ResponseEntity<Resource> streamCleanVideo(@PathVariable Long id) {
+        Clip clip = clipService.getClipById(id);
+
+        String pathToStream = (clip.getCleanVideoFilePath() != null && !clip.getCleanVideoFilePath().isBlank())
+                ? clip.getCleanVideoFilePath()
+                : clip.getVideoFilePath(); // fallback si pas de version clean fournie
+
+        File videoFile = storageService.get(pathToStream);
+        Resource resource = new FileSystemResource(videoFile);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf("video/mp4"))
+                .body(resource);
     }
 
     @GetMapping("/{id}")
@@ -67,5 +84,10 @@ public class ClipController {
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf("video/mp4"))
                 .body(resource);
+    }
+
+    @PutMapping("/{id}/clean-video")
+    public ClipDto uploadCleanVideo(@PathVariable Long id, @RequestParam MultipartFile cleanVideo) {
+        return DtoMapper.toDto(clipService.setCleanVideo(id, cleanVideo));
     }
 }

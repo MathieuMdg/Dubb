@@ -175,7 +175,7 @@ function selectClip(clip) {
     document.getElementById("preview-title").textContent = clip.clipTitle;
 
     const video = document.getElementById("original-video");
-    video.src = `${API_BASE}/clips/${clip.clipId}/video`;
+    video.src = `${API_BASE}/clips/${clip.clipId}/clean-video`;
 
     showPage("page-preview");
 }
@@ -273,13 +273,24 @@ document.getElementById("preview-segment-btn").addEventListener("click", () => {
     playSegmentRange(false);
 });
 
-function playSegmentRange(withRecording) {
+function seekTo(video, time) {
+    return new Promise(resolve => {
+        if (Math.abs(video.currentTime - time) < 0.05 && video.readyState >= 3) {
+            return resolve();
+        }
+        video.addEventListener("seeked", () => resolve(), { once: true });
+        video.currentTime = time;
+    });
+}
+
+async function playSegmentRange(withRecording) {
     const segment = dubbableSegments[currentSegmentIndex];
     const video = document.getElementById("segment-video");
 
     document.getElementById("video-overlay").classList.remove("visible");
-    video.currentTime = segment.startTime;
-    video.play();
+
+    await seekTo(video, segment.startTime);
+    await video.play(); // resolves only once playback has really started
 
     const stopAtEnd = () => {
         if (video.currentTime >= segment.endTime) {
@@ -296,10 +307,15 @@ document.getElementById("record-btn").addEventListener("click", async () => {
     const duration = segment.endTime - segment.startTime;
 
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                echoCancellation: false,
+                noiseSuppression: false,
+                autoGainControl: false
+            }
+        });
         mediaRecorder = new MediaRecorder(stream);
         recordedChunks = [];
-
         mediaRecorder.ondataavailable = e => recordedChunks.push(e.data);
         mediaRecorder.onstop = async () => {
             stream.getTracks().forEach(t => t.stop());
@@ -307,7 +323,7 @@ document.getElementById("record-btn").addEventListener("click", async () => {
             await uploadRecording(blob);
         };
 
-        playSegmentRange(true);
+        await playSegmentRange(true);
         mediaRecorder.start();
 
         document.getElementById("record-btn").disabled = true;

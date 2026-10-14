@@ -1,6 +1,7 @@
 package com.lonelys.Dubb.service;
 
 import com.lonelys.Dubb.entity.Attempt;
+import com.lonelys.Dubb.entity.Clip;
 import com.lonelys.Dubb.entity.Segment;
 import com.lonelys.Dubb.entity.SegmentRecording;
 import com.lonelys.Dubb.exception.FfmpegProcessingException;
@@ -47,7 +48,6 @@ public class FfmpegService {
         Map<Long, SegmentRecording> recordingsBySegmentId = attempt.getRecordings().stream().collect(Collectors.toMap(r -> r.getSegment().getSegmentID(), r -> r));
 
         String originalVideoPath = resolveAbsolutePath(attempt.getClip().getVideoFilePath());
-
         String workingDir = "attempts/" + attempt.getAttemptID() + "/audio";
         createWorkingDirectory(workingDir);
 
@@ -398,10 +398,12 @@ public class FfmpegService {
                                 "Attempt not found: " + attemptId
                         ));
 
-        String originalVideoPath =
-                resolveAbsolutePath(
-                        attempt.getClip().getVideoFilePath()
-                );
+        Clip clip = attempt.getClip();
+        String baseVideoPath = (clip.getCleanVideoFilePath() != null && !clip.getCleanVideoFilePath().isBlank())
+                ? clip.getCleanVideoFilePath()
+                : clip.getVideoFilePath();
+
+        String originalVideoPath = resolveAbsolutePath(baseVideoPath);
 
         String finalAudioAbsolutePath =
                 resolveAbsolutePath(finalAudioPath);

@@ -16,6 +16,7 @@ public class Clip {
     private String clipTitle;
     private String VideoFilePath;
     private double clipDuration; // in seconds
+    private String cleanVideoFilePath;
 
     // ManyToOne towards Movie
     @ManyToOne(fetch = FetchType.LAZY)
@@ -102,6 +103,14 @@ public class Clip {
 
     public void setClipID(Long clipID) {
         this.clipID = clipID;
+    }
+
+    public String getCleanVideoFilePath() {
+        return cleanVideoFilePath;
+    }
+
+    public void setCleanVideoFilePath(String cleanVideoFilePath) {
+        this.cleanVideoFilePath = cleanVideoFilePath;
     }
 
     // Methods
