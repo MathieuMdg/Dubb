@@ -16,11 +16,66 @@
     <nav class="nav" id="main-nav">
         <a href="#" data-page="page-clips" class="nav-link hidden">Clips</a>
         <a href="#" data-page="page-history" class="nav-link hidden">Mon historique</a>
+        <a href="#" data-page="page-editor" class="nav-link hidden">Éditeur</a>
         <button class="lien-bouton hidden" id="logout-btn">Déconnexion</button>
     </nav>
 </header>
 
+
+
 <div class="page">
+
+    <!-- PAGE EDITOR -->
+    <section class="page-view" id="page-editor">
+        <h1>Éditeur de segments</h1>
+        <p class="intro">Choisis un clip, fais glisser les poignées pour délimiter un passage, puis enregistre-le comme segment.</p>
+
+        <label class="editor-select">
+            Clip
+            <select id="editor-clip-select"></select>
+        </label>
+
+        <div class="video-cadre">
+            <video id="editor-video" controls preload="auto"></video>
+        </div>
+
+        <div class="range-wrap" id="range-wrap">
+            <div class="range-bands" id="range-bands"></div>
+            <div class="range-fill" id="range-fill"></div>
+            <input type="range" id="range-start" min="0" max="100" step="0.1" value="0">
+            <input type="range" id="range-end" min="0" max="100" step="0.1" value="100">
+        </div>
+
+        <div class="range-readout">
+            <span>Début : <strong id="readout-start">0.0s</strong></span>
+            <span>Fin : <strong id="readout-end">0.0s</strong></span>
+            <span>Durée : <strong id="readout-duration">0.0s</strong></span>
+        </div>
+
+        <div class="editor-actions">
+            <button class="bouton bouton-clair" id="editor-play-btn">▶ Écouter l'extrait</button>
+            <label class="editor-loop"><input type="checkbox" id="editor-loop"> Boucle</label>
+        </div>
+
+        <form class="formulaire editor-form" id="segment-form">
+            <p class="message message-erreur hidden" id="segment-error"></p>
+            <label>
+                Nom (ex : nom du personnage + réplique)
+                <input id="segment-label" type="text">
+            </label>
+            <label class="editor-loop">
+                <input type="checkbox" id="segment-dubbable" checked> Segment à doubler
+            </label>
+            <div class="editor-actions">
+                <button type="submit" class="bouton" id="segment-save-btn">Ajouter le segment</button>
+                <button type="button" class="bouton bouton-clair hidden" id="segment-cancel-btn">Annuler la modification</button>
+            </div>
+        </form>
+
+        <h2>Segments du clip</h2>
+        <div class="liste-panier" id="segment-list"></div>
+        <p class="vide hidden" id="segment-empty">Aucun segment pour ce clip.</p>
+    </section>
 
     <!-- PAGE LOGIN / REGISTER -->
     <section class="page-view active" id="page-auth">

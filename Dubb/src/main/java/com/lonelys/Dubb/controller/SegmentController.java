@@ -39,4 +39,16 @@ public class SegmentController {
                 .map(DtoMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @PutMapping("/{segmentId}")
+    public SegmentDto updateSegment(@PathVariable Long clipId, @PathVariable Long segmentId,
+                                    @RequestBody CreateSegmentRequest request) {
+        return DtoMapper.toDto(segmentService.updateSegment(segmentId, request.getStartTime(),
+                request.getEndTime(), request.getOrderIndex(), request.isDubbable(), request.getLabel()));
+    }
+
+    @DeleteMapping("/{segmentId}")
+    public void deleteSegment(@PathVariable Long clipId, @PathVariable Long segmentId) {
+        segmentService.deleteSegment(segmentId);
+    }
 }

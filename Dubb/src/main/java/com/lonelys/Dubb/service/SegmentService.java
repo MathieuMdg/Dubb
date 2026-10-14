@@ -5,6 +5,7 @@ import com.lonelys.Dubb.entity.Clip;
 import com.lonelys.Dubb.exception.InvalidSegmentException;
 import com.lonelys.Dubb.repository.SegmentRepository;
 
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -62,5 +63,37 @@ public class SegmentService {
             log.warn("Attempt to create a segment with endTime <= startTime");
             throw new InvalidSegmentException("End time must be after start time");
         }
+    }
+
+    private void checkNoOverlap(Clip clip, Long ignoredSegmentId, double start, double end) {
+        for (Segment other : segmentRepository.findByClipOrderByOrderIndexAsc(clip)) {
+            if (other.getSegmentID().equals(ignoredSegmentId)) continue;
+            if (start < other.getEndTime() && end > other.getStartTime()) {
+                log.warn("Segment overlap with segment {}", other.getSegmentID());
+                throw new InvalidSegmentException("Segment overlaps an existing segment ("
+                        + other.getStartTime() + "s - " + other.getEndTime() + "s)");
+            }
+        }
+    }
+
+    @Transactional
+    public Segment updateSegment(Long segmentId, double start, double end,
+                                 int orderIndex, boolean dubbable, String label) {
+        Segment segment = getSegmentById(segmentId);
+        checkSegment(start, end);
+        checkNoOverlap(segment.getClip(), segmentId, start, end);
+
+        segment.setStartTime(start);
+        segment.setEndTime(end);
+        segment.setOrderIndex(orderIndex);
+        segment.setDubbable(dubbable);
+        segment.setLabel(label);
+        return segmentRepository.save(segment);
+    }
+
+    @Transactional
+    public void deleteSegment(Long segmentId) {
+        Segment segment = getSegmentById(segmentId);
+        segmentRepository.delete(segment);
     }
 }
