@@ -2,7 +2,10 @@ package com.lonelys.Dubb.service;
 
 import com.lonelys.Dubb.entity.Segment;
 import com.lonelys.Dubb.entity.Clip;
+import com.lonelys.Dubb.entity.SegmentRecording;
 import com.lonelys.Dubb.exception.InvalidSegmentException;
+import com.lonelys.Dubb.repository.ClipRepository;
+import com.lonelys.Dubb.repository.SegmentRecordingRepository;
 import com.lonelys.Dubb.repository.SegmentRepository;
 
 import jakarta.transaction.Transactional;
@@ -11,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SegmentService {
@@ -18,10 +22,14 @@ public class SegmentService {
     //Attributes
     private static final Logger log = LoggerFactory.getLogger(SegmentService.class);
     private final SegmentRepository segmentRepository;
+    private final SegmentRecordingRepository segmentRecordingRepository;
+    private final StorageService storageService;
 
     //Constructors
-    public SegmentService(SegmentRepository segmentRepository) {
+    public SegmentService(SegmentRepository segmentRepository, SegmentRecordingRepository segmentRecordingRepository, StorageService storageService) {
         this.segmentRepository = segmentRepository;
+        this.segmentRecordingRepository = segmentRecordingRepository;
+        this.storageService = storageService;
     }
 
     //Methods
@@ -94,6 +102,22 @@ public class SegmentService {
     @Transactional
     public void deleteSegment(Long segmentId) {
         Segment segment = getSegmentById(segmentId);
+
+        List<SegmentRecording> recordings = segmentRecordingRepository.findBySegment(segment);
+        List<String> audioPaths = recordings.stream()
+                .map(SegmentRecording::getAudioFilePath)
+                .collect(Collectors.toList());
+
+        segmentRecordingRepository.deleteAll(recordings);
+        segmentRecordingRepository.flush();
+
+        // Keep the parent's collection in sync, otherwise cascade can try to re-persist the segment
+        segment.getClip().getSegments().remove(segment);
         segmentRepository.delete(segment);
+
+        // Files are deleted last, so a database failure does not leave rows pointing to missing files
+        audioPaths.forEach(storageService::delete); // use the real name of your delete method
+
+        log.info("Segment {} deleted with {} recording(s)", segmentId, recordings.size());
     }
 }

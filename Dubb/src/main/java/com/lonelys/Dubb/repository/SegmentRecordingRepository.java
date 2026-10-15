@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface SegmentRecordingRepository extends CrudRepository<SegmentRecording, Long> {
     List<SegmentRecording> findByAttempt(Attempt attempt);
     Optional<SegmentRecording> findByAttemptAndSegment(Attempt attempt, Segment segment);
+    List<SegmentRecording> findBySegment(Segment segment);
+    void flush();
 }

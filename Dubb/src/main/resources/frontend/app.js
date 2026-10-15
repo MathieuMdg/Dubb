@@ -198,6 +198,20 @@ document.getElementById("start-attempt-btn").addEventListener("click", async () 
     btn.disabled = true;
 
     try {
+
+        // Always use the server's current segments, never the copy cached in the clip list
+        const clipResponse = await fetch(`${API_BASE}/clips/${currentClip.clipId}`);
+        if (!clipResponse.ok) throw new Error("Impossible de charger le clip");
+        currentClip = await clipResponse.json();
+
+        dubbableSegments = currentClip.segments
+            .filter(s => s.dubbable)
+            .sort((a, b) => a.orderIndex - b.orderIndex);
+
+        if (dubbableSegments.length === 0) {
+            throw new Error("Ce clip n'a aucun segment à doubler");
+        }
+
         const response = await fetch(`${API_BASE}/attempts`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -210,9 +224,6 @@ document.getElementById("start-attempt-btn").addEventListener("click", async () 
         }
 
         currentAttempt = await response.json();
-        dubbableSegments = currentClip.segments
-            .filter(s => s.dubbable)
-            .sort((a, b) => a.orderIndex - b.orderIndex);
         currentSegmentIndex = 0;
 
         buildProgressTrack();
@@ -385,6 +396,13 @@ document.getElementById("next-segment-btn").addEventListener("click", () => {
 });
 
 document.getElementById("finalize-btn").addEventListener("click", async () => {
+    const progressResponse = await fetch(`${API_BASE}/attempts/${currentAttempt.attemptId}/progress`);
+    const progress = await progressResponse.json();
+    if (!progress.complete) {
+        alert(`Il reste ${progress.missingSegmentIds.length} segment(s) à enregistrer. Recharge la page et recommence la tentative.`);
+        return;
+    }
+
     showPage("page-processing");
 
     try {
@@ -756,7 +774,7 @@ document.getElementById("segment-form").addEventListener("submit", async (e) => 
 });
 
 async function removeSegment(s) {
-    if (!confirm(`Supprimer « ${s.label || "ce segment"} » ?`)) return;
+    if (!confirm(`Supprimer « ${s.label || "ce segment"} » ?\nLes enregistrements déjà faits sur ce segment seront aussi supprimés.`)) return;
     stopEditorPlayback();
 
     const response = await fetch(`${API_BASE}/clips/${editor.clipId}/segments/${s.segmentId}`, { method: "DELETE" });
